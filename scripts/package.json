@@ -5,6 +5,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "chalk": "^3.0.0",
+    "color-name": "^1.1.4",
     "commander": "^4.0.1",
     "debug": "^4.1.1",
     "dot-prop": "^5.2.0",
