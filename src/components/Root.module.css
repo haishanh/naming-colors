@@ -1,0 +1,33 @@
+.input {
+  border: none;
+  width: 100%;
+}
+.inputContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  font-size: 1.5em;
+  padding: 10px;
+  border-radius: 100px;
+}
+.inputMessage {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ColorInput {
+  width: 400px;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.colorItem {
+  padding: 10px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+}

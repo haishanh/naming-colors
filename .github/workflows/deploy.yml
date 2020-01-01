@@ -1,0 +1,72 @@
+on:
+  schedule:
+    # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#scheduled-events-schedule
+    - cron:  '34 1 * * *'
+  push:
+    branches:
+      - master
+    # tags:
+    #   - '*'
+
+name: Deploy workflow
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+
+      - name: Cache scripts node modules
+        uses: actions/cache@v1
+        with:
+          path: scripts/node_modules
+          key: ${{ runner.OS }}-scripts-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-scripts-
+
+      - name: Update Color JSON file
+        run: |
+          cd scripts
+          yarn
+          DEBUG=app:* node scripts/nike.js --start 0 --limit 1000 --lang en
+          DEBUG=app:* node scripts/nike.js --start 0 --limit 1000 --lang zh
+
+      - name: Install Lint Build
+        run: |
+          yarn
+          yarn lint
+          yarn build
+
+      - name: Push to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          PUBLISH_DIR: public
+          BRANCH: gh-pages
+        run: |
+          cd $PUBLISH_DIR
+          ls -l
+          git init
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@noreply.github.com"
+          git add .
+          git status
+          git commit -m "Push to gh-pages"
+          git push -f https://$GITHUB_ACTOR:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:$BRANCH
