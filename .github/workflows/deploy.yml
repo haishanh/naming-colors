@@ -43,12 +43,20 @@ jobs:
             ${{ runner.OS }}-scripts-
 
       - name: Update Color JSON file
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           cd scripts
           yarn
           cd -
           DEBUG=app:* node scripts/nike.js --start 0 --limit 1000 --lang en
           DEBUG=app:* node scripts/nike.js --start 0 --limit 1000 --lang zh
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@noreply.github.com"
+          git add .
+          git status
+          git commit -m "chore: update color json file" || true
+          git push -f https://$GITHUB_ACTOR:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:master || true
 
       - name: Install Lint Build
         run: |
