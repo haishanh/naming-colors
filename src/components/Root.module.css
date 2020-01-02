@@ -1,3 +1,16 @@
+:root {
+  --grid-item-size: 170px;
+  @media (--breakpoint-not-small) {
+    --grid-item-size: 180px;
+  }
+  @media (--breakpoint-medium) {
+    --grid-item-size: 190px;
+  }
+  @media (--breakpoint-large) {
+    --grid-item-size: 200px;
+  }
+}
+
 .input {
   border: none;
   width: 100%;
@@ -24,10 +37,16 @@
 
 .colorItem {
   padding: 10px;
-  width: 200px;
-  height: 200px;
+  width: var(--grid-item-size);
+  height: var(--grid-item-size);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
+}
+
+.gridCentered {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--grid-item-size));
+  justify-content: center;
 }

@@ -22,11 +22,6 @@ function updateUrl(v) {
   window.history.pushState(v, '', '#' + v);
 }
 
-const StyleGirdContentCentered = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, 200px)',
-  justifyContent: 'center'
-};
 const StyleFlexWrap = { display: 'flex', flexWrap: 'wrap' };
 
 const initialSearchColor = retrieveSearchColorFromUrl() || '';
@@ -244,13 +239,7 @@ function ColorMatch({ name, matched, zh }) {
 
 function ColorList({ colors, zh }) {
   return (
-    <div
-      style={
-        StyleGirdContentCentered
-        // display: 'flex',
-        // flexWrap: 'wrap'
-      }
-    >
+    <div className={s.gridCentered}>
       {colors.map(c => {
         const color = getFrontColor(c);
         const { k } = c;
