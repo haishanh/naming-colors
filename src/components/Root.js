@@ -83,8 +83,8 @@ function ColorInput({ onChange, value }) {
           className={s.input}
           type="text"
           value={v}
-          spellcheck={false}
-          maxlength="6"
+          spellCheck={false}
+          maxLength="6"
           onChange={onChangeInternal}
           onKeyDown={onKeyDown}
           placeholder="Type in color hex to find it's name"
@@ -119,10 +119,10 @@ function getColors() {
   // const [colorObj, zh, colorObjCSS] = colorObjRes.read();
 
   const x = populateColorObj(colorObj);
-  const colors = sortByLuminance(x);
+  const colors = sortColor(x);
 
   const xCSS = populateColorObj(colorObjCSS);
-  const colorsCSS = sortByLuminance(xCSS);
+  const colorsCSS = sortColor(xCSS);
 
   return [colors, zh, colorsCSS];
 }
@@ -345,6 +345,20 @@ function populateColorObj(o) {
   return collect;
 }
 
+function sortColor(o): Array<ColorItemPopulated> {
+  return sortByRed(o);
+}
+
+function sortByRed(o): Array<ColorItemPopulated> {
+  const v = Object.values(o);
+  return v.sort((a, b) => {
+    const ax = a.r - a.g - a.b;
+    const bx = b.r - b.g - b.b;
+    return bx - ax;
+  });
+}
+
+// eslint-disable-next-line no-unused-vars
 function sortByLuminance(o): Array<ColorItemPopulated> {
   const v = Object.values(o);
   return v.sort((a, b) => a.rl - b.rl);
