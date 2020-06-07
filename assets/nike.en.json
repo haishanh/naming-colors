@@ -12,6 +12,7 @@
   "303045": "Imperial Purple",
   "313547": "Metro Grey",
   "334848": "Dark Atomic Teal",
+  "345185": "True Blue",
   "353750": "Neutral Indigo",
   "364955": "Space Blue",
   "365144": "Mineral Spruce",
@@ -27,6 +28,7 @@
   "404653": "Thunder Blue",
   "423038": "Red Mahogany",
   "423239": "Deep Burgundy",
+  "424344": "Night Stadium",
   "437381": "Aurora Green Heather",
   "445054": "Faded Spruce",
   "454440": "Newsprint",
@@ -870,5 +872,8 @@
   "c6cce5": "Light Marine",
   "f4e6ae": "Tea Tree Mist",
   "00549a": "Argon Blue",
-  "46151a": "Team Dark Maroon"
+  "46151a": "Team Dark Maroon",
+  "c43787": "Pink Foil",
+  "5d5b50": "Tarp Green",
+  "49a7b9": "Turquoise Blue"
 }
