@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
@@ -27,20 +25,21 @@ const d3 = JSON.stringify(
   fs.readFileSync(path.resolve(__dirname, 'assets/css.en.json'), 'utf8')
 );
 
-const jp = x => `JSON.parse(${x})`;
+const jp = (x) => `JSON.parse(${x})`;
 const toInject = `window.__data__=[${jp(d1)},${jp(d2)},${jp(d3)}]`;
 
 const html = new HTMLPlugin({
   template: 'src/index.template.ejs',
-  inject: false,
+  // inject: false,
   filename: 'index.html',
-  data: toInject
+  data: toInject,
+  scriptLoading: 'defer',
 });
 
 const definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(isDev),
   __VERSION__: JSON.stringify(pkg.version),
-  'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+  'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 });
 
 const postcssPlugins = () =>
@@ -54,31 +53,31 @@ const postcssPlugins = () =>
             '--breakpoint-not-small': 'screen and (min-width: 30em)',
             '--breakpoint-medium':
               'screen and (min-width: 30em) and (max-width: 60em)',
-            '--breakpoint-large': 'screen and (min-width: 60em)'
-          }
-        }
-      ]
+            '--breakpoint-large': 'screen and (min-width: 60em)',
+          },
+        },
+      ],
     }),
     require('postcss-nested')(),
     require('autoprefixer')(),
     require('postcss-extend-rule')(),
-    isDev ? false : require('cssnano')()
+    isDev ? false : require('cssnano')(),
   ].filter(Boolean);
 
 const cssExtractPlugin = new MiniCssExtractPlugin({
-  filename: isDev ? '[name].css' : '[name].[contenthash].css'
+  filename: isDev ? '[name].css' : '[name].[contenthash].css',
 });
 
 const bundleAnalyzerPlugin = new BundleAnalyzerPlugin({
   analyzerMode: 'static',
   reportFilename: 'report.html',
-  openAnalyzer: false
+  openAnalyzer: false,
 });
 
 const plugins = [
   html,
   definePlugin,
-  new CopyPlugin([{ from: 'assets/*', flatten: true }]),
+  new CopyPlugin({ patterns: [{ from: 'assets/*', flatten: true }] }),
   new CleanWebpackPlugin(),
   // chart.js requires moment
   // and we don't need locale stuff in moment
@@ -87,7 +86,7 @@ const plugins = [
   isDev ? new ReactRefreshWebpackPlugin({ disableRefreshCheck: true }) : false,
   // isDev ? false : new webpack.HashedModuleIdsPlugin(),
   isDev ? false : cssExtractPlugin,
-  isDev ? false : bundleAnalyzerPlugin
+  isDev ? false : bundleAnalyzerPlugin,
 ].filter(Boolean);
 
 module.exports = {
@@ -95,13 +94,13 @@ module.exports = {
   devtool: isDev ? 'eval-source-map' : false,
   entry: {
     // app: ['react-hot-loader/patch', './src/app.js']
-    app: ['./src/app.js']
+    app: ['./src/app.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public'),
     // use contenthash instead of chunkhash to take advantage of caching
     filename: isDev ? '[name].bundle.js' : '[name].[contenthash].js',
-    publicPath: ''
+    publicPath: '',
   },
   mode: isDev ? 'development' : 'production',
   module: {
@@ -112,9 +111,9 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
-          }
-        }
+            cacheDirectory: true,
+          },
+        },
       },
       {
         test: /\.(ttf|eot|woff|woff2)(\?.+)?$/,
@@ -122,10 +121,10 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]'
-            }
-          }
-        ]
+              name: '[name].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -133,24 +132,24 @@ module.exports = {
         use: [
           isDev
             ? {
-                loader: 'style-loader'
+                loader: 'style-loader',
               }
             : MiniCssExtractPlugin.loader,
           { loader: 'css-loader' },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: postcssPlugins
-            }
-          }
-        ].filter(Boolean)
+              plugins: postcssPlugins,
+            },
+          },
+        ].filter(Boolean),
       },
       {
         test: /\.module\.css$/,
         use: [
           isDev
             ? {
-                loader: 'style-loader'
+                loader: 'style-loader',
               }
             : MiniCssExtractPlugin.loader,
           {
@@ -159,19 +158,19 @@ module.exports = {
               modules: {
                 localIdentName: isDev
                   ? '[path]_[name]_[local]_[hash:base64:5]'
-                  : '[hash:base64:10]'
-              }
-            }
+                  : '[hash:base64:10]',
+              },
+            },
           },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: postcssPlugins
-            }
-          }
-        ].filter(Boolean)
-      }
-    ]
+              plugins: postcssPlugins,
+            },
+          },
+        ].filter(Boolean),
+      },
+    ],
   },
   optimization: {
     moduleIds: isDev ? 'named' : 'hashed',
@@ -185,7 +184,7 @@ module.exports = {
               module.resource &&
               module.resource.indexOf('node_modules/core-js/') >= 0
             );
-          }
+          },
         },
         react: {
           test(module, _chunks) {
@@ -196,11 +195,11 @@ module.exports = {
                 module.resource.indexOf('node_modules/react-dom/') >= 0 ||
                 module.resource.indexOf('node_modules/react/') >= 0)
             );
-          }
-        }
-      }
+          },
+        },
+      },
     },
-    minimizer: [new TerserPlugin()]
+    minimizer: [new TerserPlugin()],
   },
-  plugins
+  plugins,
 };
