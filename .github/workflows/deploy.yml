@@ -1,10 +1,11 @@
 on:
   schedule:
     # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#scheduled-events-schedule
-    - cron:  '34 1 * * *'
+    - cron: "34 1 * * *"
   push:
     branches:
       - master
+      - dev
     # tags:
     #   - '*'
 
@@ -19,7 +20,12 @@ jobs:
         node-version: [12.x]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          ref: "dev"
+        if: ${{ github.event_name == 'schedule' }}
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name != 'schedule' }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -43,6 +49,7 @@ jobs:
             ${{ runner.OS }}-scripts-
 
       - name: Update Color JSON file
+        if: ${{ github.event_name == 'schedule' }}
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
@@ -52,11 +59,11 @@ jobs:
           DEBUG=app:* node scripts/nike.js --start 0 --limit 1000 --lang en
           DEBUG=app:* node scripts/nike.js --start 0 --limit 1000 --lang zh
           git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@noreply.github.com"
+          git config user.email "haishanhan@gmail.com"
           git add .
           git status
           git commit -m "chore: update color json file" || true
-          git push -f https://$GITHUB_ACTOR:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:master || true
+          git push -f https://$GITHUB_ACTOR:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:dev || true
 
       - name: Install Lint Build
         run: |
@@ -79,3 +86,9 @@ jobs:
           git status
           git commit -m "Push to gh-pages"
           git push -f https://$GITHUB_ACTOR:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:$BRANCH
+
+      - uses: haishanh/actions-telegram-notification@v1
+        if: ${{ always() }}
+        with:
+          notification-token: ${{ secrets.NOTIFICATION_TOKEN }}
+          job-status: ${{ job.status }}
