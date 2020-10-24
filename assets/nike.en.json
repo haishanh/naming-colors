@@ -9,6 +9,7 @@
   "245139": "Sport Green",
   "276934": "Classic Green",
   "284068": "Navy Blue",
+  "294539": "Dark Pine",
   "303045": "Imperial Purple",
   "313547": "Metro Grey",
   "334848": "Dark Atomic Teal",
@@ -23,6 +24,7 @@
   "393731": "Sequoia",
   "396540": "Pine Green",
   "403336": "Mahogany",
+  "403734": "Dark Cinder",
   "404045": "Dark Smoke Grey",
   "404143": "Charcoal Heather",
   "404653": "Thunder Blue",
@@ -30,6 +32,7 @@
   "423239": "Deep Burgundy",
   "424344": "Night Stadium",
   "437381": "Aurora Green Heather",
+  "443452": "Wine",
   "445054": "Faded Spruce",
   "454440": "Newsprint",
   "464146": "Thunder Grey",
@@ -76,6 +79,7 @@
   "829887": "Silver Pine",
   "833465": "Rave Pink Heather",
   "838181": "Dust",
+  "838883": "Shadow Grey",
   "856647": "Gum Dark Brown",
   "861127": "Dark Beetroot",
   "878989": "Particle Grey",
@@ -1001,5 +1005,10 @@
   "7d2c61": "Bright Magenta",
   "5b1696": "Fierce Purple",
   "6c6f6c": "Tumbled Grey",
-  "69615c": "Dark Mushroom"
+  "69615c": "Dark Mushroom",
+  "2e4038": "Grove Green",
+  "3063a7": "New Blue",
+  "52594f": "Bog Green",
+  "998a6a": "Hay",
+  "a0c249": "Bright Kiwi"
 }
